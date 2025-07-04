@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "title": "Pametne Prevozne Rešitve",
+    "subtitle": "Uživajte v udobju in zanesljivosti z našo privatno prevozno službo",
+    "searchDescription": "Naš inteligentni iskalnik najde popolno ujemanje za vašo pot",
+    "bookButton": "Rezervirajte Prevoz"
+  },
+  "booking": {
+    "title": "Rezervirajte Svoj Privatni Prevoz",
+    "subtitle": "Izpolnite spodnji obrazec in poslali vam bomo personalizirano ponudbo",
+    "form": {
+      "pickupLabel": "Naslov Prevzema",
+      "dropoffLabel": "Naslov Dostave",
+      "dateLabel": "Datum",
+      "timeLabel": "Čas",
+      "passengersLabel": "Potniki",
+      "nextButton": "Naslednji Korak",
+      "submitButton": "Zahtevaj Rezervacijo"
+    }
+  },
+  "features": {
+    "title": "Zakaj Izbrati Nas",
+    "professional": {
+      "title": "Profesionalna Storitev",
+      "description": "Izkušeni in vljudni vozniki so vam na voljo"
+    },
+    "comfortable": {
+      "title": "Udobna Vozila",
+      "description": "Moderna flota vozil za luksuzno potovanje"
+    },
+    "support": {
+      "title": "24/7 Podpora",
+      "description": "Celodnevna podpora strankam za vaš mir"
+    }
+  },
+  "footer": {
+    "contact": "Kontaktirajte Nas",
+    "privacy": "Politika Zasebnosti",
+    "terms": "Pogoji Uporabe",
+    "rights": "Vse pravice pridržane"
+  }
+}

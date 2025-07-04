@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120">
+  <text x="50%" y="45" font-family="Arial" font-size="36" font-weight="bold" text-anchor="middle">
+    <tspan fill="#FFD700">TheEuroRoad</tspan>
+  </text>
+  <text x="50%" y="85" font-family="Arial" font-size="36" font-weight="bold" text-anchor="middle">
+    <tspan fill="#FFD700">Trip</tspan>
+  </text>
+</svg>

@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "title": "Smart Travel Solutions",
+    "subtitle": "Enjoy comfort and reliability with our private transfer service",
+    "searchDescription": "Our intelligent search engine finds the perfect match for your journey",
+    "bookButton": "Book Your Transfer"
+  },
+  "booking": {
+    "title": "Book Your Private Transfer",
+    "subtitle": "Fill out the form below, and we'll send you a personalized offer",
+    "form": {
+      "pickupLabel": "Pick-Up Address",
+      "dropoffLabel": "Drop-Off Address",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "passengersLabel": "Passengers",
+      "nextButton": "Next Step",
+      "submitButton": "Request Booking"
+    }
+  },
+  "features": {
+    "title": "Why Choose Us",
+    "professional": {
+      "title": "Professional Service",
+      "description": "Experienced and courteous drivers at your service"
+    },
+    "comfortable": {
+      "title": "Comfortable Vehicles",
+      "description": "Modern fleet of vehicles for a luxurious journey"
+    },
+    "support": {
+      "title": "24/7 Support",
+      "description": "Round-the-clock customer support for your peace of mind"
+    }
+  },
+  "footer": {
+    "contact": "Contact Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "rights": "All rights reserved"
+  }
+}
