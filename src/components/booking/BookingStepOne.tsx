@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, MapPin, ArrowUpDown, Clock, Ban } from 'lucide-react';
+import { Calendar, MapPin, ArrowUpDown, Clock, Ban, ChevronDown, User } from 'lucide-react';
 import AddressInput from '../form/AddressInput';
 import FormInput from '../form/FormInput';
 import Button from '../ui/Button';
 import { StepOneData } from '../../types/booking';
 import { calculatePrice } from '../../services/pricingService';
-import PassengerCounter from '../form/PassengerCounter';
 
 interface BookingStepOneProps {
   formData: StepOneData;
@@ -16,6 +15,7 @@ interface BookingStepOneProps {
 export default function BookingStepOne({ formData, onChange, onNext }: BookingStepOneProps) {
   const [isPriceLoading, setIsPriceLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [serviceClass, setServiceClass] = useState('Economy');
   const [addresses, setAddresses] = useState({
     pickup: formData.pickupAddress,
     dropoff: formData.dropoffAddress
@@ -67,103 +67,144 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
     onChange({ [`${type}Address`]: value });
   };
 
+  const serviceClasses = ['Economy', 'Business', 'Premium'];
+
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="form-container">
+        {/* Service Class and Passenger Selection Row */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          {/* Service Class Dropdown */}
           <div className="relative">
-            <AddressInput
-              label="From (airport, port, address)"
-              name="pickupAddress"
-              value={addresses.pickup}
-              onChange={(value) => handleAddressChange('pickup', value)}
-              required
-              className="mb-4"
-            />
-            
-            <AddressInput
-              label="To (airport, port, address)"
-              name="dropoffAddress"
-              value={addresses.dropoff}
-              onChange={(value) => handleAddressChange('dropoff', value)}
-              required
-            />
-            
-            <button
-              type="button"
-              onClick={() => {
-                const temp = addresses.pickup;
-                handleAddressChange('pickup', addresses.dropoff);
-                handleAddressChange('dropoff', temp);
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-neutral-100 transition-colors focus-ring"
-              aria-label="Swap addresses"
+            <select
+              value={serviceClass}
+              onChange={(e) => setServiceClass(e.target.value)}
+              className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 font-medium hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <ArrowUpDown className="w-5 h-5 text-neutral-400" />
-            </button>
+              {serviceClasses.map((service) => (
+                <option key={service} value={service}>{service}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+          </div>
+
+          {/* Passenger Selection */}
+          <div className="relative">
+            <select
+              value={formData.passengers}
+              onChange={(e) => onChange({ passengers: parseInt(e.target.value) })}
+              className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 font-medium hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              {Array.from({ length: 16 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num}>
+                  {num} {num === 1 ? 'Passenger' : 'Passengers'}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="form-container">
-            <FormInput
-              label="Select Date"
-              name="date"
-              type="date"
-              value={formData.date}
-              onChange={(e) => onChange({ date: e.target.value })}
-              required
-              icon={Calendar}
-              className="w-full"
-            />
+        {/* Main Booking Form - Horizontal Layout */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+          <div className="flex flex-col lg:flex-row gap-4 items-end">
+            {/* From Field */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                From
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={addresses.pickup}
+                  onChange={(e) => handleAddressChange('pickup', e.target.value)}
+                  placeholder="City, airport or place"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* To Field */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                To
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={addresses.dropoff}
+                  onChange={(e) => handleAddressChange('dropoff', e.target.value)}
+                  placeholder="City, airport or place"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Date Field */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                DATE
+              </label>
+              <input
+                type="date"
+                value={formData.date}
+                onChange={(e) => onChange({ date: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                required
+              />
+            </div>
+
+            {/* Time Field */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                TIME
+              </label>
+              <input
+                type="time"
+                value={formData.time}
+                onChange={(e) => onChange({ time: e.target.value })}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                required
+              />
+            </div>
+
+            {/* Explore Button */}
+            <div className="flex-shrink-0 lg:ml-4">
+              <Button 
+                type="submit" 
+                className="w-full lg:w-auto px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-200"
+              >
+                Explore
+              </Button>
+            </div>
           </div>
 
-          <div className="form-container">
-            <FormInput
-              label="Select Time"
-              name="time"
-              type="time"
-              value={formData.time}
-              onChange={(e) => onChange({ time: e.target.value })}
-              required
-              icon={Clock}
-              className="w-full"
-            />
-          </div>
-        </div>
-
-        <div className="form-container">
-          <PassengerCounter
-            value={formData.passengers}
-            onChange={(value) => onChange({ passengers: value })}
-          />
-          <div className="mt-4 flex items-center gap-2 text-sm text-neutral-600 border-t border-neutral-100 pt-4">
-            <Ban className="w-4 h-4 text-secondary-500" />
+          {/* Free Cancellation Notice */}
+          <div className="mt-4 flex items-center justify-center gap-2 text-sm text-green-600">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             <span>Free cancellation up to 24h before pickup</span>
           </div>
         </div>
         
-        {/* Fixed height container for loading/error messages */}
-        <div className="h-16">
+        {/* Error/Loading Messages */}
+        <div className="text-center">
           {error && (
-            <div className="text-center p-4 bg-red-50 rounded-lg text-red-600 border border-red-200">
+            <div className="inline-block p-4 bg-red-50 rounded-lg text-red-600 border border-red-200">
               {error}
             </div>
           )}
 
-          {isPriceLoading && (
-            <div className="text-center p-4 bg-neutral-50 rounded-lg border border-neutral-200">
-              <div className="animate-pulse text-neutral-600">Calculating prices...</div>
+          {isPriceLoading && !error && (
+            <div className="inline-block p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <div className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+                <span className="text-blue-700">Calculating prices...</span>
+              </div>
             </div>
           )}
         </div>
-
-        <Button 
-          type="submit" 
-          className="btn-primary w-full py-4 text-lg"
-        >
-          Continue
-        </Button>
       </form>
     </div>
   );
