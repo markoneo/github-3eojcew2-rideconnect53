@@ -75,10 +75,30 @@ export default function GoogleAddressInput({
       // Listen for place selection
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
+        
+        // Get the best available address representation
+        let selectedAddress = '';
         if (place.formatted_address) {
-          const address = place.formatted_address;
-          setInputValue(address);
-          onChange(address, true); // Mark as confirmed when selected from autocomplete
+          selectedAddress = place.formatted_address;
+        } else if (place.name) {
+          // Fallback to place name if formatted_address is not available
+          selectedAddress = place.name;
+        } else {
+          // Last resort: get the input value
+          selectedAddress = inputRef.current?.value || '';
+        }
+        
+        if (selectedAddress) {
+          // Use setTimeout to ensure the autocomplete has finished updating
+          setTimeout(() => {
+            setInputValue(selectedAddress);
+            onChange(selectedAddress, true); // Mark as confirmed when selected from autocomplete
+            
+            // Force update the input field to ensure it shows the correct value
+            if (inputRef.current) {
+              inputRef.current.value = selectedAddress;
+            }
+          }, 0);
         }
       });
     } catch (error) {
@@ -106,16 +126,35 @@ export default function GoogleAddressInput({
 
   // Handle input blur
   const handleBlur = () => {
-    // Update parent with current input value, but not confirmed unless it was from autocomplete
-    // We don't mark it as confirmed on blur to avoid triggering price calculation for incomplete addresses
-    onChange(inputValue, false);
+    // Sync the input value with our state
+    if (inputRef.current) {
+      const actualInputValue = inputRef.current.value;
+      if (actualInputValue !== inputValue) {
+        setInputValue(actualInputValue);
+        onChange(actualInputValue, false);
+      }
+    }
+  };
+  
+  // Handle input focus to ensure sync
+  const handleFocus = () => {
+    if (inputRef.current) {
+      const actualInputValue = inputRef.current.value;
+      if (actualInputValue !== inputValue) {
+        setInputValue(actualInputValue);
+        onChange(actualInputValue, false);
+      }
+    }
   };
 
   // Clear input
   const clearInput = () => {
     setInputValue('');
     onChange('', false);
-    inputRef.current?.focus();
+    if (inputRef.current) {
+      inputRef.current.value = '';
+      inputRef.current.focus();
+    }
   };
 
   return (
@@ -135,6 +174,7 @@ export default function GoogleAddressInput({
           value={inputValue}
           onChange={handleInputChange}
           onBlur={handleBlur}
+          onFocus={handleFocus}
           required={required}
           className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors ${error ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : ''} ${className}`}
           placeholder={isLoaded ? placeholder : loadError ? 'Address search unavailable' : 'Loading address search...'}
