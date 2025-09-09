@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, MapPin, ArrowUpDown, Clock, Users, ChevronDown, Swap } from 'lucide-react';
+import { Calendar, MapPin, ArrowUpDown, Clock, Users, ChevronDown, Map as Swap } from 'lucide-react';
 import GoogleAddressInput from '../form/GoogleAddressInput';
 import Button from '../ui/Button';
 import { StepOneData } from '../../types/booking';

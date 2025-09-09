@@ -121,23 +121,14 @@ export default function GoogleAddressInput({
 
   return (
     <div className={`space-y-2 w-full ${className}`}>
-      <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
-        <MapPin size={18} className="text-primary-600" />
-        {label}
-      </label>
+      {label && (
+        <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+          <MapPin size={18} className="text-primary-600" />
+          {label}
+        </label>
+      )}
       
-      <div className="relative w-full group">
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 group-hover:text-primary-500 transition-colors duration-300 pointer-events-none">
-          {!isLoaded && !loadError ? (
-            <Loader2 size={18} className="animate-spin" />
-          ) : (
-            <MapPin size={18} />
-          )}
-        </div>
-        
-        {/* Enhanced focus ring */}
-        <div className="absolute inset-0 border border-primary-300 rounded-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"></div>
-        
+      <div className="relative w-full">        
         <input
           ref={inputRef}
           type="text"
@@ -146,7 +137,7 @@ export default function GoogleAddressInput({
           onChange={handleInputChange}
           onBlur={handleBlur}
           required={required}
-          className={`form-input pl-10 pr-10 ${error ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+          className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors ${error ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : ''} ${className}`}
           placeholder={isLoaded ? placeholder : loadError ? 'Address search unavailable' : 'Loading address search...'}
           disabled={!isLoaded && !loadError}
           autoComplete="off"
@@ -157,7 +148,7 @@ export default function GoogleAddressInput({
           <button
             type="button"
             onClick={clearInput}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors duration-200 p-1 rounded-full hover:bg-neutral-100"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100"
             aria-label="Clear address"
           >
             <X size={16} />
@@ -166,10 +157,10 @@ export default function GoogleAddressInput({
       </div>
       
       {error && <FormError message={error} />}
-      {loadError && <FormError message="Google Maps failed to load. Please refresh the page." />}
+      {loadError && <FormError message="Address search temporarily unavailable. You can still enter addresses manually." />}
       
       {!isLoaded && !loadError && (
-        <div className="text-xs text-neutral-500">Loading address autocomplete...</div>
+        <div className="text-xs text-gray-500">Loading address autocomplete...</div>
       )}
     </div>
   );
