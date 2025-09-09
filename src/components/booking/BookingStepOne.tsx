@@ -5,6 +5,17 @@ import Button from '../ui/Button';
 import { StepOneData } from '../../types/booking';
 import { calculatePrice } from '../../services/pricingService';
 
+// Validation function to check if booking is at least 24 hours in advance
+const isBookingTooSoon = (date: string, time: string): boolean => {
+  if (!date || !time) return false;
+  
+  const now = new Date();
+  const bookingDateTime = new Date(`${date}T${time}`);
+  const twentyFourHoursFromNow = new Date(now.getTime() + (24 * 60 * 60 * 1000));
+  
+  return bookingDateTime < twentyFourHoursFromNow;
+};
+
 interface BookingStepOneProps {
   formData: StepOneData;
   onChange: (data: Partial<StepOneData>) => void;
@@ -14,6 +25,7 @@ interface BookingStepOneProps {
 export default function BookingStepOne({ formData, onChange, onNext }: BookingStepOneProps) {
   const [isPriceLoading, setIsPriceLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [timeError, setTimeError] = useState<string | null>(null);
   const [addresses, setAddresses] = useState({
     pickup: formData.pickupAddress,
     dropoff: formData.dropoffAddress
@@ -26,12 +38,32 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
     });
   }, [formData.pickupAddress, formData.dropoffAddress]);
 
+  // Check booking time validation whenever date or time changes
+  useEffect(() => {
+    if (formData.date && formData.time) {
+      if (isBookingTooSoon(formData.date, formData.time)) {
+        setTimeError('Bookings must be made at least 24 hours in advance. Please select a later date or time.');
+      } else {
+        setTimeError(null);
+      }
+    } else {
+      setTimeError(null);
+    }
+  }, [formData.date, formData.time]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!addresses.pickup || !addresses.dropoff) {
       setError('Please enter pickup and dropoff addresses');
       return;
     }
+    
+    // Check 24-hour rule before proceeding
+    if (isBookingTooSoon(formData.date, formData.time)) {
+      setTimeError('Bookings must be made at least 24 hours in advance. Please select a later date or time.');
+      return;
+    }
+    
     onNext();
   };
 
@@ -93,10 +125,38 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
     return `${hours}:${minutes}`;
   };
 
+  // Get minimum date (today + 1 day to ensure 24-hour minimum)
+  const getMinimumDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const year = tomorrow.getFullYear();
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // Get minimum time for today (if today is selected)
+  const getMinimumTime = () => {
+    if (!formData.date) return '';
+    
+    const selectedDate = new Date(formData.date);
+    const today = new Date();
+    
+    // If selected date is today, minimum time is current time + 24 hours
+    if (selectedDate.toDateString() === today.toDateString()) {
+      const minTime = new Date(today.getTime() + (24 * 60 * 60 * 1000));
+      const hours = String(minTime.getHours()).padStart(2, '0');
+      const minutes = String(minTime.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+    }
+    
+    return '';
+  };
+
   // Set default values if empty
   useEffect(() => {
     if (!formData.date) {
-      onChange({ date: getTodayDate() });
+      onChange({ date: getMinimumDate() });
     }
     if (!formData.time) {
       onChange({ time: getCurrentTime() });
@@ -206,6 +266,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                   type="time"
                   value={formData.time}
                   onChange={(e) => onChange({ time: e.target.value })}
+                  min={getMinimumTime()}
                   required
                   className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:ring-0 transition-colors text-lg"
                 />
@@ -253,6 +314,13 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
             </div>
           )}
 
+          {/* Time Restriction Error */}
+          {timeError && (
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+              <p className="text-red-700 text-center font-medium">{timeError}</p>
+            </div>
+          )}
+
           {/* Loading and Error States */}
           {isPriceLoading && (
             <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
@@ -273,7 +341,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
           <div className="pt-4">
             <button
               type="submit"
-              disabled={isPriceLoading || !addresses.pickup || !addresses.dropoff}
+              disabled={isPriceLoading || !addresses.pickup || !addresses.dropoff || !!timeError}
               className="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:transform-none disabled:cursor-not-allowed shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               Book Transfer
@@ -285,7 +353,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
           <div className="text-center pt-4">
             <div className="inline-flex items-center gap-2 text-sm text-slate-500">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>Free cancellation up to 24h before pickup</span>
+              <span>Free cancellation up to 24h before pickup • Minimum 24h advance booking required</span>
             </div>
           </div>
         </form>
