@@ -1,5 +1,6 @@
 import { googleMapsService } from './googleMapsService';
 import { nominatimService } from './nominatimService';
+import { calculateDistanceWithGoogle, isGoogleMapsReady } from './mapsService';
 
 export interface DistanceResult {
   distance: number; // in kilometers
@@ -15,10 +16,10 @@ export async function calculateDistance(
   dropoff: string
 ): Promise<DistanceResult> {
   try {
-    // Try Google Maps first if available
-    if (googleMapsService.isGoogleMapsLoaded()) {
+    // Try Google Maps first if API is ready
+    if (isGoogleMapsReady()) {
       try {
-        const result = await googleMapsService.calculateDistance(pickup, dropoff);
+        const result = await calculateDistanceWithGoogle(pickup, dropoff);
         return {
           distance: Math.round(result.distance * 10) / 10, // Round to 1 decimal
           duration: Math.round(result.duration)

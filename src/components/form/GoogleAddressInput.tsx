@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { MapPin, X, Loader2 } from 'lucide-react';
-import { googleMapsService } from '../../services/googleMapsService';
-import { useGoogleMaps } from '../../hooks/useGoogleMaps';
+import { waitForGoogleMaps, createAutocomplete, isGoogleMapsReady } from '../../services/mapsService';
 import FormError from './FormError';
 
 interface GoogleAddressInputProps {
@@ -26,46 +25,66 @@ export default function GoogleAddressInput({
   placeholder = 'Start typing an address...'
 }: GoogleAddressInputProps) {
   const [inputValue, setInputValue] = useState(value);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-  const { isLoaded, loadError } = useGoogleMaps();
 
   // Update input value when prop changes
   useEffect(() => {
     setInputValue(value);
   }, [value]);
 
-  // Initialize Google Places Autocomplete
+  // Initialize Google Maps
   useEffect(() => {
-    if (!isLoaded || !inputRef.current || autocompleteRef.current) {
-      return;
-    }
-
-    const initializeAutocomplete = async () => {
+    const initGoogleMaps = async () => {
       try {
-        const autocomplete = await googleMapsService.createAutocomplete(inputRef.current!, {
-          componentRestrictions: { country: ['it', 'si', 'hr', 'at'] },
-          fields: ['formatted_address', 'geometry', 'name', 'place_id', 'types'],
-          types: ['establishment', 'geocode']
-        });
+        if (isGoogleMapsReady()) {
+          setIsLoaded(true);
+          return;
+        }
 
-        autocompleteRef.current = autocomplete;
-
-        // Listen for place selection
-        autocomplete.addListener('place_changed', () => {
-          const place = autocomplete.getPlace();
-          if (place.formatted_address) {
-            const address = place.formatted_address;
-            setInputValue(address);
-            onChange(address);
-          }
-        });
+        await waitForGoogleMaps();
+        setIsLoaded(true);
+        setLoadError(null);
       } catch (error) {
-        console.error('Failed to initialize Google Places Autocomplete:', error);
+        console.error('Failed to load Google Maps:', error);
+        setLoadError('Failed to load Google Maps');
+        setIsLoaded(false);
       }
     };
 
-    initializeAutocomplete();
+    initGoogleMaps();
+  }, []);
+
+  // Initialize Google Places Autocomplete
+  useEffect(() => {
+    if (!isLoaded || !inputRef.current || autocompleteRef.current || loadError) {
+      return;
+    }
+
+    try {
+      const autocomplete = createAutocomplete(inputRef.current);
+      
+      if (!autocomplete) {
+        throw new Error('Failed to create autocomplete instance');
+      }
+
+      autocompleteRef.current = autocomplete;
+
+      // Listen for place selection
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place.formatted_address) {
+          const address = place.formatted_address;
+          setInputValue(address);
+          onChange(address);
+        }
+      });
+    } catch (error) {
+      console.error('Failed to initialize Google Places Autocomplete:', error);
+      setLoadError('Failed to initialize address search');
+    }
 
     // Cleanup
     return () => {
@@ -74,7 +93,7 @@ export default function GoogleAddressInput({
         autocompleteRef.current = null;
       }
     };
-  }, [isLoaded, onChange]);
+  }, [isLoaded, onChange, loadError]);
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

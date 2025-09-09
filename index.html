@@ -187,8 +187,18 @@
         window.dispatchEvent(new Event('google-maps-loaded'));
       };
     </script>
-    <script async defer 
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwK2Iyy20CtlyKbO8F977Ck4pGsHjQ-es&libraries=places&callback=initGoogleMaps">
+    <script>
+      // Load Google Maps API with environment variable
+      const GOOGLE_MAPS_API_KEY = 'AIzaSyBwK2Iyy20CtlyKbO8F977Ck4pGsHjQ-es';
+      if (GOOGLE_MAPS_API_KEY) {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&callback=initGoogleMaps`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      } else {
+        console.error('Google Maps API key not found');
+      }
     </script>
   </head>
   <body>
