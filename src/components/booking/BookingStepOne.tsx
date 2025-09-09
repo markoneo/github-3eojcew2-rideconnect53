@@ -26,6 +26,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
   const [isPriceLoading, setIsPriceLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [timeError, setTimeError] = useState<string | null>(null);
+  const [shouldShowPrice, setShouldShowPrice] = useState(false);
   const [addresses, setAddresses] = useState({
     pickup: formData.pickupAddress,
     dropoff: formData.dropoffAddress
@@ -70,8 +71,12 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
   useEffect(() => {
     const getPriceEstimate = async () => {
       if (addresses.pickup && addresses.dropoff) {
+        // Clear previous price and show loading state
         setIsPriceLoading(true);
+        setShouldShowPrice(false);
         setError(null);
+        onChange({ priceEstimate: undefined }); // Clear previous estimate
+        
         try {
           const estimate = await calculatePrice(
             addresses.pickup,
@@ -79,16 +84,22 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
             formData.passengers
           );
           onChange({ priceEstimate: estimate });
+          setShouldShowPrice(true);
         } catch (error) {
           console.error('Error getting price estimate:', error);
           setError('Unable to calculate price. Please check the addresses and try again.');
         } finally {
           setIsPriceLoading(false);
         }
+      } else {
+        // Clear price when addresses are incomplete
+        setShouldShowPrice(false);
+        onChange({ priceEstimate: undefined });
       }
     };
 
-    const timeoutId = setTimeout(getPriceEstimate, 1000);
+    // Debounce the price calculation to prevent too many API calls
+    const timeoutId = setTimeout(getPriceEstimate, 800);
     return () => clearTimeout(timeoutId);
   }, [addresses.pickup, addresses.dropoff, formData.passengers, onChange]);
 
@@ -297,7 +308,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
           </div>
 
           {/* Price Display Section */}
-          {formData.priceEstimate && !isPriceLoading && (
+          {shouldShowPrice && formData.priceEstimate && !isPriceLoading && (
             <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -323,10 +334,17 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
 
           {/* Loading and Error States */}
           {isPriceLoading && (
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 animate-pulse">
               <div className="flex items-center justify-center gap-3">
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
-                <span className="text-blue-700 font-medium">Calculating price...</span>
+                <span className="text-blue-700 font-medium">Calculating best price...</span>
+              </div>
+              <div className="mt-2 text-center">
+                <div className="inline-flex space-x-1">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
               </div>
             </div>
           )}
@@ -341,10 +359,10 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
           <div className="pt-4">
             <button
               type="submit"
-              disabled={isPriceLoading || !addresses.pickup || !addresses.dropoff || !!timeError}
+              disabled={isPriceLoading || !addresses.pickup || !addresses.dropoff || !!timeError || !shouldShowPrice}
               className="w-full bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:transform-none disabled:cursor-not-allowed shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
-              Book Transfer
+              {isPriceLoading ? 'Calculating...' : 'Book Transfer'}
               <ArrowUpDown className="rotate-90" size={20} />
             </button>
           </div>
