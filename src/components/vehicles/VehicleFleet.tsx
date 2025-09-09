@@ -1,58 +1,112 @@
-import React, { useEffect } from 'react';
-import { vehicles } from '../../constants/vehicles';
-import VehicleCard from './VehicleCard';
-import SectionTitle from '../ui/SectionTitle';
-import MeetGreet from './MeetGreet';
+import React from 'react';
+import AnimatedContainer from '../ui/AnimatedContainer';
+
+const vehicles = [
+  {
+    name: 'Standard Car',
+    description: 'Mercedes C-Class or similar (up to 3 people, 3 luggage)',
+    price: '€250',
+    features: [
+      'Professional driver',
+      'Door-to-door service', 
+      'Free waiting time (60 min)',
+      'Flight monitoring',
+      'Complimentary water',
+      'Child seats available'
+    ],
+    icon: '🚗',
+    popular: false
+  },
+  {
+    name: 'Van',
+    description: 'Mercedes Vito or similar (up to 7 people, 10 luggage)',
+    price: '€350',
+    features: [
+      'Professional driver',
+      'Door-to-door service',
+      'Free waiting time (60 min)', 
+      'Flight monitoring',
+      'Complimentary water'
+    ],
+    icon: '🚐',
+    popular: true
+  },
+  {
+    name: 'Minibus',
+    description: '2 Mercedes Vito or similar (up to 14 people, 20 luggage)',
+    price: '€650',
+    features: [
+      'Professional driver',
+      'Door-to-door service',
+      'Free waiting time (60 min)',
+      'Flight monitoring', 
+      'Complimentary water'
+    ],
+    icon: '🚌',
+    popular: false
+  }
+];
 
 export default function VehicleFleet() {
-  // Initialize Sirv
-  useEffect(() => {
-    // Check if Sirv script already exists to avoid duplicates
-    if (!document.getElementById('sirv-script')) {
-      const script = document.createElement('script');
-      script.id = 'sirv-script';
-      script.src = 'https://scripts.sirv.com/sirvjs/v3/sirv.js';
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
-
   return (
-    <section className="py-8 bg-gray-50 relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionTitle
-          title={
-            <span className="relative inline-block">
-              Airport Taxis for Any Kind of Trip
-              <span className="absolute -bottom-1 left-0 w-full h-2 bg-blue-100 -z-10 transform -rotate-1"></span>
-            </span>
-          }
-          subtitle="Choose from our diverse fleet of vehicles to match your specific needs. From standard cars to spacious minivans, we have the perfect vehicle for your journey."
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mt-6">
-          {vehicles.map((vehicle, index) => (
-            <div 
-              key={vehicle.id} 
-              className="transition-all duration-500"
-              style={{ 
-                animationDelay: `${index * 0.1}s`,
-                transform: `translateY(${index % 2 === 0 ? '0' : '10px'})` 
-              }}
-            >
-              <VehicleCard {...vehicle} />
-            </div>
-          ))}
+    <div className="py-16 lg:py-24 bg-slate-50">
+      <div className="section-container">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <AnimatedContainer animation="slideUp">
+            <h2 className="text-3xl lg:text-4xl font-bold text-slate-800 mb-4">
+              Additional Services
+            </h2>
+            <div className="w-20 h-1 bg-cyan-400 mx-auto mb-6"></div>
+            <p className="text-slate-600 max-w-3xl mx-auto text-lg">
+              Customize your Dolomites transfer to suit your mountain adventure schedule and luggage needs
+            </p>
+          </AnimatedContainer>
         </div>
 
-        <MeetGreet />
+        {/* Vehicle Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {vehicles.map((vehicle, index) => (
+            <AnimatedContainer key={index} animation="slideUp" delay={index * 200}>
+              <div className={`relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 ${
+                vehicle.popular ? 'ring-2 ring-cyan-400' : ''
+              }`}>
+                {vehicle.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-cyan-400 text-slate-800 font-bold px-6 py-2 rounded-full text-sm">
+                      Most Popular
+                    </span>
+                  </div>
+                )}
+                
+                <div className="text-center mb-8">
+                  <div className="text-6xl mb-4">{vehicle.icon}</div>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">{vehicle.name}</h3>
+                  <p className="text-slate-600 text-sm mb-6">{vehicle.description}</p>
+                  
+                  <div className="mb-6">
+                    <div className="text-4xl font-bold text-slate-800">{vehicle.price}</div>
+                    <div className="text-slate-500">per transfer</div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {vehicle.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="flex items-center gap-3">
+                      <div className="w-5 h-5 bg-cyan-400 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg className="w-3 h-3 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span className="text-slate-700 text-sm">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedContainer>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
