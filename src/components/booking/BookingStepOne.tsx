@@ -119,7 +119,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                   label=""
                   name="pickupAddress"
                   value={addresses.pickup}
-                  onChange={(e) => handleAddressChange('pickup', e.target.value)}
+                  onChange={(value) => handleAddressChange('pickup', value)}
                   placeholder="City, airport or place"
                   required
                 />
@@ -136,7 +136,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                   label=""
                   name="dropoffAddress"
                   value={addresses.dropoff}
-                  onChange={(e) => handleAddressChange('dropoff', e.target.value)}
+                  onChange={(value) => handleAddressChange('dropoff', value)}
                   placeholder="City, airport or place"
                   required
                 />
