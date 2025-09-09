@@ -7,7 +7,7 @@ interface GoogleAddressInputProps {
   label: string;
   name: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, isConfirmed?: boolean) => void;
   required?: boolean;
   error?: string;
   className?: string;
@@ -78,7 +78,7 @@ export default function GoogleAddressInput({
         if (place.formatted_address) {
           const address = place.formatted_address;
           setInputValue(address);
-          onChange(address);
+          onChange(address, true); // Mark as confirmed when selected from autocomplete
         }
       });
     } catch (error) {
@@ -100,22 +100,21 @@ export default function GoogleAddressInput({
     const newValue = e.target.value;
     setInputValue(newValue);
     
-    // Only update parent if user is typing (not from autocomplete)
-    if (e.target === document.activeElement) {
-      onChange(newValue);
-    }
+    // Update parent but mark as not confirmed (user is typing)
+    onChange(newValue, false);
   };
 
   // Handle input blur
   const handleBlur = () => {
-    // Update parent with current input value
-    onChange(inputValue);
+    // Update parent with current input value, but not confirmed unless it was from autocomplete
+    // We don't mark it as confirmed on blur to avoid triggering price calculation for incomplete addresses
+    onChange(inputValue, false);
   };
 
   // Clear input
   const clearInput = () => {
     setInputValue('');
-    onChange('');
+    onChange('', false);
     inputRef.current?.focus();
   };
 

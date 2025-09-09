@@ -30,6 +30,14 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
     pickup: formData.pickupAddress,
     dropoff: formData.dropoffAddress
   });
+  const [addressesConfirmed, setAddressesConfirmed] = useState({
+    pickup: false,
+    dropoff: false
+  });
+  const [lastCalculatedAddresses, setLastCalculatedAddresses] = useState({
+    pickup: '',
+    dropoff: ''
+  });
 
   useEffect(() => {
     setAddresses({
@@ -67,9 +75,16 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
     onNext();
   };
 
+  // Only calculate price when both addresses are confirmed and different from last calculation
   useEffect(() => {
     const getPriceEstimate = async () => {
-      if (addresses.pickup && addresses.dropoff) {
+      // Only calculate if both addresses are confirmed, have content, and are different from last calculation
+      if (addresses.pickup && 
+          addresses.dropoff && 
+          addressesConfirmed.pickup && 
+          addressesConfirmed.dropoff &&
+          (addresses.pickup !== lastCalculatedAddresses.pickup || 
+           addresses.dropoff !== lastCalculatedAddresses.dropoff)) {
         setIsPriceLoading(true);
         setError(null);
         try {
@@ -79,6 +94,10 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
             formData.passengers
           );
           onChange({ priceEstimate: estimate });
+          setLastCalculatedAddresses({
+            pickup: addresses.pickup,
+            dropoff: addresses.dropoff
+          });
         } catch (error) {
           console.error('Error getting price estimate:', error);
           setError('Unable to calculate price. Please check the addresses and try again.');
@@ -88,14 +107,20 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
       }
     };
 
-    const timeoutId = setTimeout(getPriceEstimate, 1000);
-    return () => clearTimeout(timeoutId);
-  }, [addresses.pickup, addresses.dropoff, formData.passengers, onChange]);
+    // Immediate calculation when addresses are confirmed
+    getPriceEstimate();
+  }, [addresses.pickup, addresses.dropoff, addressesConfirmed.pickup, addressesConfirmed.dropoff, formData.passengers, onChange, lastCalculatedAddresses.pickup, lastCalculatedAddresses.dropoff]);
 
-  const handleAddressChange = (type: 'pickup' | 'dropoff', value: string) => {
+  const handleAddressChange = (type: 'pickup' | 'dropoff', value: string, isConfirmed: boolean = false) => {
     setAddresses(prev => ({ ...prev, [type]: value }));
+    setAddressesConfirmed(prev => ({ ...prev, [type]: isConfirmed }));
     const updateKey = type === 'pickup' ? 'pickupAddress' : 'dropoffAddress';
     onChange({ [updateKey]: value });
+    
+    // Clear price estimate if user is typing (not confirmed)
+    if (!isConfirmed && formData.priceEstimate) {
+      onChange({ priceEstimate: undefined });
+    }
   };
 
   const handleSwapAddresses = () => {
@@ -103,7 +128,12 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
       pickup: addresses.dropoff,
       dropoff: addresses.pickup
     };
+    const newConfirmed = {
+      pickup: addressesConfirmed.dropoff,
+      dropoff: addressesConfirmed.pickup
+    };
     setAddresses(newAddresses);
+    setAddressesConfirmed(newConfirmed);
     onChange({
       pickupAddress: newAddresses.pickup,
       dropoffAddress: newAddresses.dropoff
@@ -195,7 +225,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                   label=""
                   name="pickupAddress"
                   value={addresses.pickup}
-                  onChange={(value) => handleAddressChange('pickup', value)}
+                  onChange={(value, isConfirmed) => handleAddressChange('pickup', value, isConfirmed)}
                   placeholder="Airport, city, or address..."
                   required
                   className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:ring-0 transition-colors text-lg"
@@ -226,7 +256,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                   label=""
                   name="dropoffAddress"
                   value={addresses.dropoff}
-                  onChange={(value) => handleAddressChange('dropoff', value)}
+                  onChange={(value, isConfirmed) => handleAddressChange('dropoff', value, isConfirmed)}
                   placeholder="Airport, city, or address..."
                   required
                   className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-cyan-500 focus:ring-0 transition-colors text-lg"
@@ -297,7 +327,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
           </div>
 
           {/* Price Display Section */}
-          {formData.priceEstimate && !isPriceLoading && (
+          {formData.priceEstimate && (
             <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border-2 border-cyan-200 rounded-xl p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -322,7 +352,7 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
           )}
 
           {/* Loading and Error States */}
-          {isPriceLoading && (
+          {isPriceLoading && addressesConfirmed.pickup && addressesConfirmed.dropoff && (
             <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
               <div className="flex items-center justify-center gap-3">
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
