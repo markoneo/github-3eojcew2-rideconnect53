@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, MapPin, ArrowUpDown, Clock, Ban, ChevronDown, User } from 'lucide-react';
-import AddressInput from '../form/AddressInput';
+import GoogleAddressInput from '../form/GoogleAddressInput';
 import FormInput from '../form/FormInput';
 import Button from '../ui/Button';
 import { StepOneData } from '../../types/booking';
@@ -64,7 +64,8 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
 
   const handleAddressChange = (type: 'pickup' | 'dropoff', value: string) => {
     setAddresses(prev => ({ ...prev, [type]: value }));
-    onChange({ [`${type}Address`]: value });
+    const updateKey = type === 'pickup' ? 'pickupAddress' : 'dropoffAddress';
+    onChange({ [updateKey]: value });
   };
 
   const serviceClasses = ['Economy', 'Business', 'Premium'];
@@ -114,12 +115,12 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                 From
               </label>
               <div className="relative">
-                <input
-                  type="text"
+                <GoogleAddressInput
+                  label=""
+                  name="pickupAddress"
                   value={addresses.pickup}
                   onChange={(e) => handleAddressChange('pickup', e.target.value)}
                   placeholder="City, airport or place"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500"
                   required
                 />
               </div>
@@ -131,12 +132,12 @@ export default function BookingStepOne({ formData, onChange, onNext }: BookingSt
                 To
               </label>
               <div className="relative">
-                <input
-                  type="text"
+                <GoogleAddressInput
+                  label=""
+                  name="dropoffAddress"
                   value={addresses.dropoff}
                   onChange={(e) => handleAddressChange('dropoff', e.target.value)}
                   placeholder="City, airport or place"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-500"
                   required
                 />
               </div>

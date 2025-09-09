@@ -1,3 +1,4 @@
+import { googleMapsService } from './googleMapsService';
 import { nominatimService } from './nominatimService';
 
 export interface DistanceResult {
@@ -14,42 +15,61 @@ export async function calculateDistance(
   dropoff: string
 ): Promise<DistanceResult> {
   try {
-    // Get coordinates for both addresses
-    const [pickupResults, dropoffResults] = await Promise.all([
-      nominatimService.searchAddresses(pickup),
-      nominatimService.searchAddresses(dropoff)
-    ]);
-
-    if (pickupResults.length === 0) {
-      throw new Error(`Could not find coordinates for pickup address: ${pickup}`);
+    // Try Google Maps first if available
+    if (googleMapsService.isGoogleMapsLoaded()) {
+      try {
+        const result = await googleMapsService.calculateDistance(pickup, dropoff);
+        return {
+          distance: Math.round(result.distance * 10) / 10, // Round to 1 decimal
+          duration: Math.round(result.duration)
+        };
+      } catch (googleError) {
+        console.warn('Google Maps distance calculation failed, falling back to Nominatim:', googleError);
+      }
     }
 
-    if (dropoffResults.length === 0) {
-      throw new Error(`Could not find coordinates for dropoff address: ${dropoff}`);
+    // Fallback to Nominatim service
+    try {
+      // Get coordinates for both addresses
+      const [pickupResults, dropoffResults] = await Promise.all([
+        nominatimService.searchAddresses(pickup),
+        nominatimService.searchAddresses(dropoff)
+      ]);
+
+      if (pickupResults.length === 0) {
+        throw new Error(`Could not find coordinates for pickup address: ${pickup}`);
+      }
+
+      if (dropoffResults.length === 0) {
+        throw new Error(`Could not find coordinates for dropoff address: ${dropoff}`);
+      }
+
+      // Use the first (most relevant) result for each
+      const pickupCoords = pickupResults[0].coordinates;
+      const dropoffCoords = dropoffResults[0].coordinates;
+
+      // Calculate straight-line distance
+      const straightLineDistance = nominatimService.calculateDistance(
+        pickupCoords.lat,
+        pickupCoords.lon,
+        dropoffCoords.lat,
+        dropoffCoords.lon
+      );
+
+      // Estimate driving distance (add 30% to account for roads)
+      const drivingDistance = straightLineDistance * 1.3;
+
+      // Estimate duration (assume average speed of 60 km/h)
+      const estimatedDuration = (drivingDistance / 60) * 60; // in minutes
+
+      return {
+        distance: Math.round(drivingDistance * 10) / 10, // Round to 1 decimal
+        duration: Math.round(estimatedDuration)
+      };
+    } catch (nominatimError) {
+      console.warn('Nominatim distance calculation also failed:', nominatimError);
+      throw nominatimError;
     }
-
-    // Use the first (most relevant) result for each
-    const pickupCoords = pickupResults[0].coordinates;
-    const dropoffCoords = dropoffResults[0].coordinates;
-
-    // Calculate straight-line distance
-    const straightLineDistance = nominatimService.calculateDistance(
-      pickupCoords.lat,
-      pickupCoords.lon,
-      dropoffCoords.lat,
-      dropoffCoords.lon
-    );
-
-    // Estimate driving distance (add 30% to account for roads)
-    const drivingDistance = straightLineDistance * 1.3;
-
-    // Estimate duration (assume average speed of 60 km/h)
-    const estimatedDuration = (drivingDistance / 60) * 60; // in minutes
-
-    return {
-      distance: Math.round(drivingDistance * 10) / 10, // Round to 1 decimal
-      duration: Math.round(estimatedDuration)
-    };
   } catch (error) {
     console.error('Error calculating distance:', error);
     
