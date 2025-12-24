@@ -38,5 +38,44 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "rights": "All rights reserved"
+  },
+  "offers": {
+    "winter": {
+      "badge": "Winter Special 2025-2026",
+      "title": "Popular Dolomites Destinations 2025-2026",
+      "subtitle": "Discover the breathtaking beauty of the Italian Dolomites. From Venice Airport, we provide comfortable transfers to these UNESCO World Heritage mountain destinations, perfect for skiing, hiking, and Alpine experiences.",
+      "from": "from",
+      "save": "Save",
+      "highlights": "Highlights",
+      "bookNow": "Book Now",
+      "validUntil": "* Offers valid until March 31, 2026 | Subject to availability",
+      "cortina": {
+        "destination": "Cortina d'Ampezzo",
+        "description": "The Queen of the Dolomites, famous for its stunning mountain scenery and world-class skiing. Home to the 2026 Winter Olympics.",
+        "duration": "~3.5 hours from Venice",
+        "availability": "Year-round",
+        "highlight1": "2026 Winter Olympics venue",
+        "highlight2": "Luxury mountain resort",
+        "highlight3": "Premium ski slopes"
+      },
+      "altabadia": {
+        "destination": "Alta Badia (Corvara)",
+        "description": "A paradise for food lovers and ski enthusiasts, known for its Ladin culture and exceptional mountain cuisine.",
+        "duration": "~3 hours from Venice",
+        "availability": "Winter & Summer",
+        "highlight1": "Gourmet mountain restaurants",
+        "highlight2": "Sella Ronda ski circuit",
+        "highlight3": "Authentic Ladin culture"
+      },
+      "valgardena": {
+        "destination": "Val Gardena (Ortisei)",
+        "description": "Picture-perfect valley combining German-speaking culture with Italian charm, offering world-class skiing and hiking.",
+        "duration": "~3.5 hours from Venice",
+        "availability": "Year-round",
+        "highlight1": "Saslong downhill course",
+        "highlight2": "Traditional wood carving",
+        "highlight3": "Family-friendly slopes"
+      }
+    }
   }
 }

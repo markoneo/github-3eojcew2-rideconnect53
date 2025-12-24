@@ -12,6 +12,7 @@ import ToursSection from './components/tours/ToursSection';
 import Chatbot from './components/chat/Chatbot';
 import ReviewsSlider from './components/reviews/ReviewsSlider';
 import TriesteVeniceTransfer from './components/transfers/TriesteVeniceTransfer';
+import WinterOffers from './components/offers/WinterOffers';
 import { trackVisitor } from './services/visitorTrackingService';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
             <Features />
           </div>
 
+          <WinterOffers />
           <TriesteVeniceTransfer />
           <VehicleFleet />
           <BookingSteps />

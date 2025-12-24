@@ -38,5 +38,44 @@
     "privacy": "Politika Zasebnosti",
     "terms": "Pogoji Uporabe",
     "rights": "Vse pravice pridržane"
+  },
+  "offers": {
+    "winter": {
+      "badge": "Zimska Ponudba 2025-2026",
+      "title": "Priljubljene Destinacije v Dolomitih 2025-2026",
+      "subtitle": "Odkrijte osupljivo lepoto Italijanskih Dolomitov. Z letališča v Benetkah zagotavljamo udobne prevoze do teh gorskih destinacij, vpisanih na UNESCO-v seznam svetovne dediščine, popolnih za smučanje, pohodništvo in alpske izkušnje.",
+      "from": "od",
+      "save": "Prihranite",
+      "highlights": "Poudarki",
+      "bookNow": "Rezerviraj Zdaj",
+      "validUntil": "* Ponudbe veljajo do 31. marca 2026 | Glede na razpoložljivost",
+      "cortina": {
+        "destination": "Cortina d'Ampezzo",
+        "description": "Kraljica Dolomitov, znana po osupljivi gorski pokrajini in smučanju svetovnega razreda. Dom zimskih olimpijskih iger 2026.",
+        "duration": "~3,5 ure od Benetk",
+        "availability": "Vse leto",
+        "highlight1": "Prizorišče zimskih olimpijskih iger 2026",
+        "highlight2": "Luksuzno gorsko letovišče",
+        "highlight3": "Vrhunske smučarske proge"
+      },
+      "altabadia": {
+        "destination": "Alta Badia (Corvara)",
+        "description": "Raj za gurmansko hrano in ljubitelje smučanja, znan po ladinški kulturi in izjemni gorski kuhinji.",
+        "duration": "~3 ure od Benetk",
+        "availability": "Zima in Poletje",
+        "highlight1": "Gurmansko gorske restavracije",
+        "highlight2": "Smučarski krog Sella Ronda",
+        "highlight3": "Avtentična ladinska kultura"
+      },
+      "valgardena": {
+        "destination": "Val Gardena (Ortisei)",
+        "description": "Slikovita dolina, ki združuje nemško govoreče kulturo z italijanskim šarmom in ponuja smučanje in pohodništvo svetovnega razreda.",
+        "duration": "~3,5 ure od Benetk",
+        "availability": "Vse leto",
+        "highlight1": "Saslong spust",
+        "highlight2": "Tradicionalna rezbarstvo v lesu",
+        "highlight3": "Proge primerne za družine"
+      }
+    }
   }
 }
