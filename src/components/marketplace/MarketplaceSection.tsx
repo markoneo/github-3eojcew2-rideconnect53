@@ -22,7 +22,7 @@ export default function MarketplaceSection() {
               <div className="absolute inset-0 bg-slate-900/40"></div>
 
               <div className="relative z-10">
-                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-8">
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-8 whitespace-pre-line">
                   {t('marketplace.title')}
                 </h2>
 
