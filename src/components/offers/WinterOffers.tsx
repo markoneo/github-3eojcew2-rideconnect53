@@ -20,6 +20,20 @@ interface WinterOffer {
 export default function WinterOffers() {
   const { t } = useTranslation();
 
+  const handleBookNow = (offer: WinterOffer) => {
+    const subject = t('offers.winter.email.subject', { destination: offer.destination });
+    const body = t('offers.winter.email.body', {
+      destination: offer.destination,
+      price: offer.price,
+      duration: offer.duration,
+      availability: offer.availability,
+      highlights: offer.highlights.join('\n• ')
+    });
+
+    const mailtoLink = `mailto:info.rideconnect@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+  };
+
   const offers: WinterOffer[] = [
     {
       id: 'cortina',
@@ -187,7 +201,10 @@ export default function WinterOffers() {
                     </ul>
                   </div>
 
-                  <button className="mt-6 w-full bg-gradient-to-r from-teal-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-teal-600 hover:to-blue-700 transform transition-all duration-300 hover:scale-105 focus:scale-105 shadow-lg hover:shadow-xl">
+                  <button
+                    onClick={() => handleBookNow(offer)}
+                    className="mt-6 w-full bg-gradient-to-r from-teal-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-teal-600 hover:to-blue-700 transform transition-all duration-300 hover:scale-105 focus:scale-105 shadow-lg hover:shadow-xl"
+                  >
                     {t('offers.winter.bookNow')}
                   </button>
                 </div>
