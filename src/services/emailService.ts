@@ -1,22 +1,41 @@
-import emailjs from '@emailjs/browser';
 import { BookingFormData } from '../types/booking';
 import { PartnerFormData } from '../types/partner';
 import { ContactFormData } from '../types/contact';
 import { calculatePrice } from './pricingService';
 
-// EmailJS configuration
-const EMAIL_SERVICE_ID = 'service_3r106zo';
 const EMAIL_TEMPLATES = {
   BOOKING: 'template_fioe9zi',
   PARTNER: 'template_ohldd0v',
   CONTACT: 'template_fioe9zi',
   TRANSFER: 'template_fioe9zi'
 };
-const EMAIL_PUBLIC_KEY = 'Unuj1E45FQnI66OOZ';
 const ADMIN_EMAIL = 'info.rideconnect@gmail.com';
 
-// Initialize EmailJS
-emailjs.init(EMAIL_PUBLIC_KEY);
+const sendEmailViaEdgeFunction = async (templateId: string, templateParams: any): Promise<void> => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Supabase configuration is missing');
+  }
+
+  const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${supabaseKey}`,
+    },
+    body: JSON.stringify({
+      templateId,
+      templateParams,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to send email');
+  }
+};
 
 // Add function for transfer bookings - admin notification only
 export const sendTransferBookingEmail = async (formData: {
@@ -55,15 +74,7 @@ export const sendTransferBookingEmail = async (formData: {
       order_number: orderNumber
     };
 
-    const adminResponse = await emailjs.send(
-      EMAIL_SERVICE_ID,
-      EMAIL_TEMPLATES.TRANSFER,
-      adminTemplateParams
-    );
-
-    if (adminResponse.status !== 200) {
-      throw new Error('Failed to send transfer booking email to admin');
-    }
+    await sendEmailViaEdgeFunction(EMAIL_TEMPLATES.TRANSFER, adminTemplateParams);
     
     console.log('Admin notification sent for transfer booking');
   } catch (error) {
@@ -157,15 +168,7 @@ export const sendBookingEmail = async (formData: BookingFormData): Promise<void>
       order_number: orderNumber
     };
 
-    const adminResponse = await emailjs.send(
-      EMAIL_SERVICE_ID,
-      EMAIL_TEMPLATES.BOOKING,
-      adminTemplateParams
-    );
-
-    if (adminResponse.status !== 200) {
-      throw new Error('Failed to send booking email to admin');
-    }
+    await sendEmailViaEdgeFunction(EMAIL_TEMPLATES.BOOKING, adminTemplateParams);
 
     console.log('Admin notification sent for booking');
   } catch (error) {
@@ -189,15 +192,7 @@ export const sendPartnerApplicationEmail = async (formData: PartnerFormData): Pr
       subject: `New Partner Application from ${formData.companyName}`
     };
 
-    const response = await emailjs.send(
-      EMAIL_SERVICE_ID,
-      EMAIL_TEMPLATES.PARTNER,
-      templateParams
-    );
-
-    if (response.status !== 200) {
-      throw new Error('Failed to send partner application email');
-    }
+    await sendEmailViaEdgeFunction(EMAIL_TEMPLATES.PARTNER, templateParams);
   } catch (error) {
     console.error('Error sending partner application:', error);
     throw error;
@@ -219,15 +214,7 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<void>
       timestamp: new Date().toLocaleString()
     };
 
-    const response = await emailjs.send(
-      EMAIL_SERVICE_ID,
-      EMAIL_TEMPLATES.CONTACT,
-      templateParams
-    );
-
-    if (response.status !== 200) {
-      throw new Error('Failed to send contact email');
-    }
+    await sendEmailViaEdgeFunction(EMAIL_TEMPLATES.CONTACT, templateParams);
   } catch (error) {
     console.error('Error sending contact email:', error);
     throw error;
