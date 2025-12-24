@@ -17,7 +17,14 @@ This application requires the following environment variables to be configured i
 3. **VITE_GOOGLE_MAPS_API_KEY**
    - Your Google Maps API key
    - Get from: Google Cloud Console > APIs & Services > Credentials
-   - Value: `AIzaSyBwK2Iyy20CtlyKbO8F977Ck4pGsHjQ-es`
+
+4. **VITE_TELEGRAM_BOT_TOKEN** (Optional)
+   - Your Telegram bot token for visitor tracking
+   - Get from: @BotFather on Telegram
+
+5. **VITE_TELEGRAM_CHAT_ID** (Optional)
+   - Your Telegram chat ID for receiving visitor notifications
+   - Get from: @userinfobot on Telegram
 
 ## Google Maps API Key Security
 

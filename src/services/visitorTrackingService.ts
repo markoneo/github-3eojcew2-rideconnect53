@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 // Configuration
-const TELEGRAM_BOT_TOKEN = '6860681919:AAE1lggXrkQEIWAdSzVm2AAyO0f8kbx8uoc'; // Your Telegram bot token
-const TELEGRAM_CHAT_ID = '446583957'; // Your chat ID
+const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 const IPAPI_URL = 'https://ipapi.co/json/';
 const SEND_TO_TELEGRAM = true; // Set to false to disable Telegram notifications
 
