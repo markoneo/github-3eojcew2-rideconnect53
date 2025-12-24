@@ -14,7 +14,7 @@ export default function MarketplaceSection() {
             <div
               className="relative px-8 py-16 text-center bg-cover bg-center"
               style={{
-                backgroundImage: 'url(/images/screenshot_2025-11-26_at_04.08.42.png)',
+                backgroundImage: 'url(https://baldus.sirv.com/GTO/Screenshot%202025-11-26%20at%2004.08.42.png)',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}
