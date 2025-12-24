@@ -23,7 +23,7 @@ export default function MarketplaceSection() {
 
               <div className="relative z-10">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-8 whitespace-pre-line">
-                  {t('marketplace.title')}
+                  {t('offers.marketplace.title')}
                 </h2>
 
                 <p className="text-2xl sm:text-3xl text-white font-semibold mb-8">
@@ -36,7 +36,7 @@ export default function MarketplaceSection() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 bg-white text-blue-700 font-bold text-lg px-8 py-4 rounded-xl hover:bg-gray-50 transform transition-all duration-300 hover:scale-105 shadow-2xl hover:shadow-3xl group"
                 >
-                  {t('marketplace.visitWebsite')}
+                  {t('offers.marketplace.visitWebsite')}
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
               </div>
