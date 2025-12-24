@@ -90,6 +90,17 @@
         "subject": "Zahteva za rezervacijo zimskega prevoza - {{destination}}",
         "body": "Pozdravljeni,\n\nRad bi zahteval rezervacijo prevoza za naslednjo zimsko posebno ponudbo:\n\nDestinacija: {{destination}}\nCena: {{price}}\nTrajanje potovanja: {{duration}}\nRazpoložljivost: {{availability}}\n\nPoudarki:\n• {{highlights}}\n\n--- PROSIMO, IZPOLNITE NASLEDNJE INFORMACIJE ---\n\nŽeleni datum: [Prosimo, dodajte želeni datum potovanja]\nŽeleni čas: [Prosimo, dodajte želeni čas prevzema]\nŠtevilo potnikov: [Prosimo, navedite]\nLokacija prevzema: [Prosimo, navedite - npr. letališče Benetke, naslov hotela]\nLokacija dostave: {{destination}}\n\nDodatne opombe/posebne želje:\n[Prosimo, dodajte posebne zahteve ali vprašanja]\n\nKontaktne informacije:\nIme: [Vaše polno ime]\nTelefon: [Vaša telefonska številka]\nE-pošta: [Vaš e-poštni naslov]\n\nHvala!\n\n---\nZimska ponudba 2025-2026\nPonudbe veljajo do 31. marca 2026"
       }
+    },
+    "marketplace": {
+      "title": "Pridobite več ponudb naših partnerjev",
+      "privateTransfer": "Zasebni prevoz",
+      "marketplace": "Tržnica",
+      "compareOffers": "Primerjajte ponudbe",
+      "description": "Zahtevajte ponudbe več preverjenih ponudnikov prevozov in izberite najboljšo možnost za svoje potovanje.",
+      "benefit1": "Več ponudb",
+      "benefit2": "Najboljše cene",
+      "benefit3": "Preverjeni partnerji",
+      "cta": "Primerjaj ponudbe zdaj"
     }
   }
 }

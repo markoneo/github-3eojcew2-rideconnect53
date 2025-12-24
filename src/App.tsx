@@ -13,6 +13,7 @@ import Chatbot from './components/chat/Chatbot';
 import ReviewsSlider from './components/reviews/ReviewsSlider';
 import TriesteVeniceTransfer from './components/transfers/TriesteVeniceTransfer';
 import WinterOffers from './components/offers/WinterOffers';
+import MarketplaceSection from './components/marketplace/MarketplaceSection';
 import { trackVisitor } from './services/visitorTrackingService';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
           <ReviewsSlider />
           <ToursSection />
           <PartnerSection />
+          <MarketplaceSection />
         </main>
 
         <Footer />

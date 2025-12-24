@@ -90,6 +90,17 @@
         "subject": "Winter Transfer Booking Request - {{destination}}",
         "body": "Hello,\n\nI would like to request a transfer booking for the following Winter Special offer:\n\nDestination: {{destination}}\nPrice: {{price}}\nTravel Duration: {{duration}}\nAvailability: {{availability}}\n\nHighlights:\n• {{highlights}}\n\n--- PLEASE FILL IN THE FOLLOWING INFORMATION ---\n\nPreferred Date: [Please add your preferred travel date]\nPreferred Time: [Please add your preferred pickup time]\nNumber of Passengers: [Please specify]\nPickup Location: [Please specify - e.g., Venice Airport, hotel address]\nDrop-off Location: {{destination}}\n\nAdditional Notes/Special Requests:\n[Please add any special requirements or questions]\n\nContact Information:\nName: [Your full name]\nPhone: [Your contact number]\nEmail: [Your email address]\n\nThank you!\n\n---\nWinter Special 2025-2026\nOffers valid until March 31, 2026"
       }
+    },
+    "marketplace": {
+      "title": "Get Multiple Offers from Our Partners",
+      "privateTransfer": "Private Transfer",
+      "marketplace": "Marketplace",
+      "compareOffers": "Compare Offers",
+      "description": "Request quotes from multiple verified transfer providers and choose the best option for your journey.",
+      "benefit1": "Multiple quotes",
+      "benefit2": "Best prices",
+      "benefit3": "Verified partners",
+      "cta": "Compare Offers Now"
     }
   }
 }
