@@ -1,5 +1,5 @@
 import React from 'react';
-import { Snowflake, MapPin, Calendar, Star, Sparkles } from 'lucide-react';
+import { Snowflake, MapPin, Calendar, Star, Sparkles, Mountain } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import AnimatedContainer from '../ui/AnimatedContainer';
 
@@ -69,6 +69,21 @@ export default function WinterOffers() {
         t('offers.winter.valgardena.highlight3')
       ],
       icon: <Sparkles className="w-8 h-8" />
+    },
+    {
+      id: 'arabba',
+      destination: t('offers.winter.arabba.destination'),
+      description: t('offers.winter.arabba.description'),
+      price: '440€',
+      duration: t('offers.winter.arabba.duration'),
+      availability: t('offers.winter.arabba.availability'),
+      highlights: [
+        t('offers.winter.arabba.highlight1'),
+        t('offers.winter.arabba.highlight2'),
+        t('offers.winter.arabba.highlight3'),
+        t('offers.winter.arabba.highlight4')
+      ],
+      icon: <Mountain className="w-8 h-8" />
     }
   ];
 
@@ -98,7 +113,7 @@ export default function WinterOffers() {
           </div>
         </AnimatedContainer>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {offers.map((offer, index) => (
             <AnimatedContainer
               key={offer.id}

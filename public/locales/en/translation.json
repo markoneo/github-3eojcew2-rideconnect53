@@ -75,6 +75,16 @@
         "highlight1": "Saslong downhill course",
         "highlight2": "Traditional wood carving",
         "highlight3": "Family-friendly slopes"
+      },
+      "arabba": {
+        "destination": "Arabba",
+        "description": "Hidden gem in the heart of the Dolomites, perfect for those seeking authentic mountain experiences and pristine slopes.",
+        "duration": "~3 hours from Venice",
+        "availability": "Winter & Summer",
+        "highlight1": "Authentic mountain village",
+        "highlight2": "Marmolada glacier access",
+        "highlight3": "Off-the-beaten-path charm",
+        "highlight4": "Family-friendly atmosphere"
       }
     }
   }

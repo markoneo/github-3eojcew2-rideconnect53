@@ -75,6 +75,16 @@
         "highlight1": "Saslong spust",
         "highlight2": "Tradicionalna rezbarstvo v lesu",
         "highlight3": "Proge primerne za družine"
+      },
+      "arabba": {
+        "destination": "Arabba",
+        "description": "Skrita perla v srcu Dolomitov, popolna za tiste, ki iščejo pristne gorske izkušnje in nedotaknjene strmine.",
+        "duration": "~3 ure od Benetk",
+        "availability": "Zima in Poletje",
+        "highlight1": "Pristna gorska vas",
+        "highlight2": "Dostop do ledenika Marmolada",
+        "highlight3": "Osamljena lokacija",
+        "highlight4": "Družini prijazna atmosfera"
       }
     }
   }
