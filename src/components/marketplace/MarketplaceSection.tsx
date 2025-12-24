@@ -26,20 +26,6 @@ export default function MarketplaceSection() {
                   {t('marketplace.title')}
                 </h2>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 mb-8">
-                  <span className="text-xl sm:text-2xl font-bold text-teal-300 uppercase tracking-wider">
-                    {t('marketplace.privateTransfer')}
-                  </span>
-                  <span className="hidden sm:inline text-white/50 text-2xl">•</span>
-                  <span className="text-xl sm:text-2xl font-bold text-blue-300 uppercase tracking-wider">
-                    {t('marketplace.marketplace')}
-                  </span>
-                  <span className="hidden sm:inline text-white/50 text-2xl">•</span>
-                  <span className="text-xl sm:text-2xl font-bold text-white uppercase tracking-wider">
-                    {t('marketplace.compareOffers')}
-                  </span>
-                </div>
-
                 <p className="text-2xl sm:text-3xl text-white font-semibold mb-8">
                   www.gettransferoffer.com
                 </p>
