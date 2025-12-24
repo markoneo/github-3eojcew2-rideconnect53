@@ -92,15 +92,11 @@
       }
     },
     "marketplace": {
-      "title": "Pridobite več ponudb naših partnerjev",
+      "title": "GetTransferOffer",
       "privateTransfer": "Zasebni prevoz",
       "marketplace": "Tržnica",
       "compareOffers": "Primerjajte ponudbe",
-      "description": "Zahtevajte ponudbe več preverjenih ponudnikov prevozov in izberite najboljšo možnost za svoje potovanje.",
-      "benefit1": "Več ponudb",
-      "benefit2": "Najboljše cene",
-      "benefit3": "Preverjeni partnerji",
-      "cta": "Primerjaj ponudbe zdaj"
+      "visitWebsite": "Obiščite spletno stran"
     }
   }
 }

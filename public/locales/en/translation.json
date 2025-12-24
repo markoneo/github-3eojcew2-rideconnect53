@@ -92,15 +92,11 @@
       }
     },
     "marketplace": {
-      "title": "Get Multiple Offers from Our Partners",
+      "title": "GetTransferOffer",
       "privateTransfer": "Private Transfer",
       "marketplace": "Marketplace",
       "compareOffers": "Compare Offers",
-      "description": "Request quotes from multiple verified transfer providers and choose the best option for your journey.",
-      "benefit1": "Multiple quotes",
-      "benefit2": "Best prices",
-      "benefit3": "Verified partners",
-      "cta": "Compare Offers Now"
+      "visitWebsite": "Visit Website"
     }
   }
 }
