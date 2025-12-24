@@ -19,7 +19,7 @@ export default function MarketplaceSection() {
                 backgroundPosition: 'center'
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 via-blue-900/85 to-slate-900/85"></div>
+              <div className="absolute inset-0 bg-slate-900/40"></div>
 
               <div className="relative z-10">
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-8">
